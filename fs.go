@@ -1,4 +1,4 @@
-package main
+package layerfs
 
 import (
 	"io/fs"

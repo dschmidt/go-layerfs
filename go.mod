@@ -1,4 +1,4 @@
-module github.com/dschmidt/go-layerfs/m/v2
+module github.com/dschmidt/go-layerfs/m
 
 go 1.17
 

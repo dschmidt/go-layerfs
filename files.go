@@ -1,4 +1,4 @@
-package main
+package layerfs
 
 import (
 	"errors"
