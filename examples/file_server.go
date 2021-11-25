@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	layerfs "github.com/dschmidt/go-layerfs/m"
+	layerfs "github.com/dschmidt/go-layerfs"
 )
 
 func main() {
