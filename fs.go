@@ -4,7 +4,7 @@ import (
 	"io/fs"
 )
 
-// Creates a new LayerFS instance based on 0-n fs.FS layers.
+// New creates a new LayerFs instance based on 0-n fs.FS layers.
 func New(layers ...fs.FS) *LayerFs {
 	return &LayerFs{layers: layers}
 }
