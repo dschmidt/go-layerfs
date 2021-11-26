@@ -4,15 +4,23 @@ import (
 	"io/fs"
 )
 
-func New(layers ...fs.FS) *layerFs {
-	return &layerFs{layers: layers}
+// Creates a new LayerFS instance based on 0-n fs.FS layers.
+func New(layers ...fs.FS) *LayerFs {
+	return &LayerFs{layers: layers}
 }
 
-type layerFs struct {
+// LayerFs implements several interfaces from io/fs
+// and delegates function calls sequentially to the underlying
+// layers until one does not return an error. If all layers
+// return errors, LayerFs returns an error
+// In case of ReadDir LayerFs merges the DirEntry instances
+// returned by the underlying layers.
+type LayerFs struct {
 	layers []fs.FS
 }
 
-func (fsys *layerFs) Open(name string) (fs.File, error) {
+// Open opens the named file (implements fs.FS).
+func (fsys *LayerFs) Open(name string) (fs.File, error) {
 	for _, layer := range fsys.layers {
 		f, err := layer.Open(name)
 		if err != nil {
@@ -30,7 +38,8 @@ func (fsys *layerFs) Open(name string) (fs.File, error) {
 	return nil, newError("could not Open", name)
 }
 
-func (fsys *layerFs) ReadFile(name string) ([]byte, error) {
+// ReadFile reads the named file and returns its contents (implements fs.ReadFileFS).
+func (fsys *LayerFs) ReadFile(name string) ([]byte, error) {
 	for _, layer := range fsys.layers {
 		file, err := fs.ReadFile(layer, name)
 		if err != nil {
@@ -43,7 +52,8 @@ func (fsys *layerFs) ReadFile(name string) ([]byte, error) {
 	return nil, newError("could not ReadFile", name)
 }
 
-func (fsys *layerFs) ReadDir(name string) ([]fs.DirEntry, error) {
+// ReadDir reads the named directory (implements fs.ReadDirFS).
+func (fsys *LayerFs) ReadDir(name string) ([]fs.DirEntry, error) {
 	entryMap := make(map[string]bool)
 	entries := make([]fs.DirEntry, 0)
 	errorLayers := 0
@@ -74,7 +84,8 @@ func (fsys *layerFs) ReadDir(name string) ([]fs.DirEntry, error) {
 	return entries, nil
 }
 
-func (fsys *layerFs) Stat(name string) (fs.FileInfo, error) {
+// Stat returns a FileInfo describing the file (implements fs.StatFS).
+func (fsys *LayerFs) Stat(name string) (fs.FileInfo, error) {
 	for _, layer := range fsys.layers {
 		fi, err := fs.Stat(layer, name)
 		if err != nil {

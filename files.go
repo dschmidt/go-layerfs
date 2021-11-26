@@ -8,7 +8,7 @@ type dirFile struct {
 	fs.File
 	fs fs.FS
 
-	layerFs *layerFs
+	layerFs *LayerFs
 	name    string
 }
 

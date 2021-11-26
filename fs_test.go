@@ -14,7 +14,7 @@ func assertContent(assert *assert.Assertions, filesystem fs.FS, fileName string,
 	assert.Equal(content, fileContent)
 }
 
-func setupTestFs(assert *assert.Assertions) *layerFs {
+func setupTestFs(assert *assert.Assertions) *LayerFs {
 	upperFs := memfs.New()
 	assert.Nil(upperFs.WriteFile("f1.txt", []byte("foo"), 0755))
 	assert.Nil(upperFs.WriteFile("f2.txt", []byte("foo"), 0755))
