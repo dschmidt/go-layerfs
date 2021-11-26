@@ -5,7 +5,7 @@ import (
 )
 
 // use indirection over Info() because WalkDir creates a statDirEntry
-// wrapper and there's no way we can inject our own type there
+// wrapper and there's no way we can inject our own type there.
 func GetSourceFsForDirEntry(d fs.DirEntry) (fs.FS, error) {
 	info, err := d.Info()
 	if err != nil {

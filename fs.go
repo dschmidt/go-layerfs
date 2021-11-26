@@ -44,13 +44,13 @@ func (fsys *layerFs) ReadFile(name string) ([]byte, error) {
 }
 
 func (fsys *layerFs) ReadDir(name string) ([]fs.DirEntry, error) {
-	entryMap := make(map[string]bool, 0)
+	entryMap := make(map[string]bool)
 	entries := make([]fs.DirEntry, 0)
 	errorLayers := 0
 	for _, layer := range fsys.layers {
 		layerEntries, err := fs.ReadDir(layer, name)
 		if err != nil {
-			errorLayers += 1
+			errorLayers++
 			continue
 		}
 		for _, layerEntry := range layerEntries {
