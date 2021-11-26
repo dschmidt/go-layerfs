@@ -64,7 +64,7 @@ func TestDirFileReadDir(t *testing.T) {
 
 	// test ReadDir does not accept 0 as argument
 	_, err := dirFile.ReadDir(0)
-	assert.Equal(err.Error(), "layerFilesystem: could not ReadDir because n >= 0 is not supported: foo.txt")
+	assert.Equal(err.Error(), "go-layerfs: could not ReadDir because n >= 0 is not supported: foo.txt")
 
 	// test ReadDir propagates Stat errors
 	_, err = dirFile.ReadDir(-1)
@@ -76,7 +76,7 @@ func TestDirFileReadDir(t *testing.T) {
 	assert.Nil(err)
 	dirFile.File = f
 	_, err = dirFile.ReadDir(-1)
-	assert.Equal(err.Error(), "layerFilesystem: could not ReadDir because dirFile does not point to a directory: foo.txt")
+	assert.Equal(err.Error(), "go-layerfs: could not ReadDir because dirFile does not point to a directory: foo.txt")
 }
 
 func TestDirEntryInfo(t *testing.T) {
