@@ -70,7 +70,7 @@ func TestWalkDir(t *testing.T) {
 	assert.Nil(fs.WalkDir(layerFs, ".", func(path string, d fs.DirEntry, err error) error {
 		assert.Nil(err)
 
-		sourceFs, err := GetSourceFsForDirEntry(d)
+		sourceFs, err := GetFsForDirEntry(d)
 		assert.Nil(err)
 		if d.IsDir() {
 			return nil
