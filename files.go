@@ -49,18 +49,18 @@ type dirEntry struct {
 	fs fs.FS
 }
 
-func (e *dirEntry) GetFs() fs.FS {
-	return e.fs
+func (d *dirEntry) GetFs() fs.FS {
+	return d.fs
 }
 
-func (e *dirEntry) Info() (fs.FileInfo, error) {
-	info, err := e.DirEntry.Info()
+func (d *dirEntry) Info() (fs.FileInfo, error) {
+	info, err := d.DirEntry.Info()
 	if err != nil {
 		return nil, err
 	}
 
 	return fileInfo{
 		info,
-		e.fs,
+		d.fs,
 	}, nil
 }
