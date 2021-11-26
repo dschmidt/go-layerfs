@@ -19,27 +19,12 @@ func (fsys *layerFs) Open(name string) (fs.File, error) {
 			continue
 		}
 
-		// TODO: we only need this to determine if we're dealing with a directory
-		// and that we only need for implementing ReadDirFileFS, should we make it optional?
-		info, err := f.Stat()
-		if err != nil {
-			return nil, err
-		}
-
-		file := file{
+		return &dirFile{
 			f,
 			layer,
-		}
-
-		if info.IsDir() {
-			return &dirFile{
-				file,
-				fsys,
-				name,
-			}, nil
-		}
-
-		return &file, nil
+			fsys,
+			name,
+		}, nil
 	}
 
 	return nil, newError("could not Open", name)
