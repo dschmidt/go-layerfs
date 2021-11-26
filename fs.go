@@ -27,7 +27,7 @@ func (fsys *LayerFs) Open(name string) (fs.File, error) {
 			continue
 		}
 
-		return &dirFile{
+		return &DirFile{
 			f,
 			layer,
 			fsys,
@@ -69,7 +69,7 @@ func (fsys *LayerFs) ReadDir(name string) ([]fs.DirEntry, error) {
 				continue
 			}
 			entryMap[layerEntry.Name()] = true
-			lFsDirEntry := &dirEntry{
+			lFsDirEntry := &DirEntry{
 				layerEntry,
 				layer,
 			}
@@ -92,7 +92,7 @@ func (fsys *LayerFs) Stat(name string) (fs.FileInfo, error) {
 			continue
 		}
 
-		return fileInfo{
+		return FileInfo{
 			fi,
 			layer,
 		}, nil
