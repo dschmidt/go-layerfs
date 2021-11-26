@@ -54,7 +54,7 @@ func (fsys *LayerFs) ReadFile(name string) ([]byte, error) {
 
 // ReadDir reads the named directory (implements fs.ReadDirFS).
 func (fsys *LayerFs) ReadDir(name string) ([]fs.DirEntry, error) {
-	entryMap := make(map[string]bool)
+	entryMap := map[string]bool{}
 	entries := make([]fs.DirEntry, 0)
 	errorLayers := 0
 	for _, layer := range fsys.layers {
