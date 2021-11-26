@@ -1,7 +1,6 @@
 package layerfs
 
 import (
-	"errors"
 	"io/fs"
 )
 
@@ -19,7 +18,7 @@ func (f *dirFile) GetFs() fs.FS {
 
 func (f *dirFile) ReadDir(n int) ([]fs.DirEntry, error) {
 	if n >= 0 {
-		return nil, errors.New("layerFilesystem: Could not ReadDir because n >= 0 is not supported")
+		return nil, newError("could not ReadDir because n >= 0 is not supported", f.name)
 	}
 
 	info, err := f.Stat()
