@@ -13,7 +13,11 @@ This is a simple wrapper around multiple `fs.FS` instances, recursively merging 
 If you have two directories, of which one is called `examples/upper` and the other `examples/lower`, you can layer upper over lower like this:
 
 ```go
-import "github.com/dschmidt/go-layerfs"
+import (
+	"os"
+	"path/filepath"
+	"github.com/dschmidt/go-layerfs"
+)
 upper, _ := filepath.Abs("examples/upper")
 lower, _ := filepath.Abs("examples/lower")
 fsys := layerfs.New(os.DirFS(upper), os.DirFS(lower))
@@ -30,7 +34,7 @@ If `examples/upper` looks like this
 └── f2.txt (content: foo)
 ```
 
-and `examples/lower` looks like this:
+and `examples/lower` looks like this
 
 ```
 .
