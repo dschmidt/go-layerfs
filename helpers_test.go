@@ -50,5 +50,5 @@ func TestGetFsForDirEntry(t *testing.T) {
 	assert.Nil(fsys.MkdirAll("dir1", 0777))
 	entries, err = fs.ReadDir(fsys, ".")
 	_, err = GetLayerForDirEntry(entries[0])
-	assert.Equal("layerFilesystem: Could not assert DirEntry type: dir1", err.Error())
+	assert.Equal("go-layerfs: Could not assert DirEntry type: dir1", err.Error())
 }

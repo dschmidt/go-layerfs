@@ -53,7 +53,7 @@ func TestLayerFsOpen(t *testing.T) {
 
 	// test proper error is returned when no layers succeed
 	_, err = layerFs.Open("f4.txt")
-	assert.Equal("layerFilesystem: could not Open: f4.txt", err.Error())
+	assert.Equal("go-layerfs: could not Open: f4.txt", err.Error())
 }
 
 func TestLayerFsReadFile(t *testing.T) {
@@ -62,7 +62,7 @@ func TestLayerFsReadFile(t *testing.T) {
 
 	// test proper error is returned when no layers succeed
 	_, err := layerFs.ReadFile("f4.txt")
-	assert.Equal("layerFilesystem: could not ReadFile: f4.txt", err.Error())
+	assert.Equal("go-layerfs: could not ReadFile: f4.txt", err.Error())
 }
 
 func TestLayerFsReadDir(t *testing.T) {
@@ -78,7 +78,7 @@ func TestLayerFsReadDir(t *testing.T) {
 
 	// test proper error is returned when no layers succeed
 	_, err = fs.ReadDir(layerFs, "dir4")
-	assert.Equal("layerFilesystem: could not ReadDir: dir4", err.Error())
+	assert.Equal("go-layerfs: could not ReadDir: dir4", err.Error())
 }
 
 func TestLayerFsStat(t *testing.T) {
@@ -94,7 +94,7 @@ func TestLayerFsStat(t *testing.T) {
 
 	// test proper error is returned when no layers succeed
 	_, err = layerFs.Stat("f4.txt")
-	assert.Equal("layerFilesystem: could not Stat: f4.txt", err.Error())
+	assert.Equal("go-layerfs: could not Stat: f4.txt", err.Error())
 }
 
 func TestLayerFsWalkDir(t *testing.T) {
