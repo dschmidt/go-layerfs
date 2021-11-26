@@ -38,7 +38,7 @@ func TestGetFsForDirEntry(t *testing.T) {
 	assert.Equal(layerFs.layers[0], layer)
 
 	// test error retrieving FileInfo is propagated
-	invalidDirEntry := &wrappingDirEntry{&dirEntry{
+	invalidDirEntry := &wrappingDirEntry{&DirEntry{
 		DirEntry: &invalidDirEntryInfo{},
 	}}
 	_, err = GetLayerForDirEntry(invalidDirEntry)

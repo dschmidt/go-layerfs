@@ -86,7 +86,7 @@ func TestLayerFsStat(t *testing.T) {
 	layerFs := setupTestFs(assert)
 	info, _ := layerFs.Stat(".")
 
-	assert.IsType(fileInfo{}, info)
+	assert.IsType(FileInfo{}, info)
 
 	// test errors in upper layers are skipped
 	info, err := layerFs.Stat("f3.txt")

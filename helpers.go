@@ -6,7 +6,7 @@ import (
 
 // GetLayerForDirEntry returns the source layer for a DirEntry.
 func GetLayerForDirEntry(d fs.DirEntry) (fs.FS, error) {
-	if entry, ok := d.(*dirEntry); ok {
+	if entry, ok := d.(*DirEntry); ok {
 		return entry.GetFs(), nil
 	}
 
@@ -19,7 +19,7 @@ func GetLayerForDirEntry(d fs.DirEntry) (fs.FS, error) {
 	// wrapper and there's no way we can inject our own type there
 	// In contrast to that we can always provide our own fileInfo
 	// and use that even from WalkDir callback.
-	fileInfo, ok := info.(fileInfo)
+	fileInfo, ok := info.(FileInfo)
 	if !ok {
 		return nil, newError("Could not assert DirEntry type", d.Name())
 	}

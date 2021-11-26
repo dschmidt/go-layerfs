@@ -44,7 +44,7 @@ func TestDirFileGetFs(t *testing.T) {
 	assert := assert.New(t)
 
 	fsys := memfs.New()
-	dirFile := dirFile{
+	dirFile := DirFile{
 		name: "dir1",
 		fs:   fsys,
 	}
@@ -56,7 +56,7 @@ func TestDirFileReadDir(t *testing.T) {
 
 	fsys := memfs.New()
 
-	dirFile := dirFile{
+	dirFile := DirFile{
 		File: &invalidFile{},
 		fs:   fsys,
 		name: "foo.txt",
@@ -82,7 +82,7 @@ func TestDirFileReadDir(t *testing.T) {
 func TestDirEntryInfo(t *testing.T) {
 	assert := assert.New(t)
 
-	dirEntry := dirEntry{
+	dirEntry := DirEntry{
 		DirEntry: &invalidDirEntryInfo{},
 	}
 
