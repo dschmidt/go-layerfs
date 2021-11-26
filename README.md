@@ -1,5 +1,12 @@
 # go-layerfs
 
+[![Latest Release](https://img.shields.io/github/release/dschmidt/go-layerfs.svg)](https://github.com/dschmidt/go-layerfs/releases)
+[![Build Status](https://github.com/dschmidt/go-layerfs/workflows/build/badge.svg)](https://github.com/dschmidt/go-layerfs/actions)
+[![Coverage Status](https://coveralls.io/repos/github/dschmidt/go-layerfs/badge.svg?branch=main)](https://coveralls.io/github/dschmidt/go-layerfs?branch=main)
+[![Go ReportCard](https://goreportcard.com/badge/dschmidt/go-layerfs)](https://goreportcard.com/report/dschmidt/go-layerfs)
+[![GoDoc](https://pkg.go.dev/badge/github.com/dschmidt/go-layerfs)](https://pkg.go.dev/github.com/dschmidt/go-layerfs)
+
+
 This is a simple wrapper around multiple `fs.FS` instances, recursively merging them together dynamically.
 
 
