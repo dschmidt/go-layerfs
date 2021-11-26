@@ -1,30 +1,33 @@
 package layerfs
 
 import (
-	"errors"
 	"io/fs"
 )
 
-type file struct {
-	fs.File
-
-	fs fs.FS
-}
-
-func (f *file) GetFs() fs.FS {
-	return f.fs
-}
-
 type dirFile struct {
-	file
+	fs.File
+	fs fs.FS
 
-	layerFs *layerFs
+	layerFs *LayerFs
 	name    string
+}
+
+func (f *dirFile) GetFs() fs.FS {
+	return f.fs
 }
 
 func (f *dirFile) ReadDir(n int) ([]fs.DirEntry, error) {
 	if n >= 0 {
-		return nil, errors.New("layerFilesystem: Could not ReadDir because n >= 0 is not supported")
+		return nil, newError("could not ReadDir because n >= 0 is not supported", f.name)
+	}
+
+	info, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	if !info.IsDir() {
+		return nil, newError("could not ReadDir because dirFile does not point to a directory", f.name)
 	}
 
 	return f.layerFs.ReadDir(f.name)
