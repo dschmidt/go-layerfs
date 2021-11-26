@@ -4,8 +4,12 @@ import (
 	"io/fs"
 )
 
-// GetFsForDirEntry returns the source layer for a DirEntry.
-func GetFsForDirEntry(d fs.DirEntry) (fs.FS, error) {
+// GetLayerForDirEntry returns the source layer for a DirEntry.
+func GetLayerForDirEntry(d fs.DirEntry) (fs.FS, error) {
+	if entry, ok := d.(*dirEntry); ok {
+		return entry.GetFs(), nil
+	}
+
 	info, err := d.Info()
 	if err != nil {
 		return nil, err

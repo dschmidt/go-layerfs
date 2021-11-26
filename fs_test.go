@@ -2,6 +2,7 @@ package layerfs
 
 import (
 	"io/fs"
+	"io/ioutil"
 	"testing"
 
 	"github.com/psanford/memfs"
@@ -32,7 +33,7 @@ func setupTestFs(assert *assert.Assertions) *LayerFs {
 	return New(upperFs, lowerFs)
 }
 
-func TestLayerOpen(t *testing.T) {
+func TestLayerFsOpen(t *testing.T) {
 	assert := assert.New(t)
 	layerFs := setupTestFs(assert)
 	assertContent(assert, layerFs, "f1.txt", []byte("foo"))
@@ -42,9 +43,29 @@ func TestLayerOpen(t *testing.T) {
 	assertContent(assert, layerFs, "dir1/f11.txt", []byte("foo"))
 	assertContent(assert, layerFs, "dir1/f12.txt", []byte("foo"))
 	assertContent(assert, layerFs, "dir1/f13.txt", []byte("bar"))
+
+	// test errors in upper layers are skipped
+	f, err := layerFs.Open("f3.txt")
+	assert.Nil(err)
+	c, err := ioutil.ReadAll(f)
+	assert.Nil(err)
+	assert.Equal([]byte("bar"), c)
+
+	// test proper error is returned when no layers succeed
+	_, err = layerFs.Open("f4.txt")
+	assert.Equal("layerFilesystem: could not Open: f4.txt", err.Error())
 }
 
-func TestLayerReadDir(t *testing.T) {
+func TestLayerFsReadFile(t *testing.T) {
+	assert := assert.New(t)
+	layerFs := setupTestFs(assert)
+
+	// test proper error is returned when no layers succeed
+	_, err := layerFs.ReadFile("f4.txt")
+	assert.Equal("layerFilesystem: could not ReadFile: f4.txt", err.Error())
+}
+
+func TestLayerFsReadDir(t *testing.T) {
 	assert := assert.New(t)
 	layerFs := setupTestFs(assert)
 	_, err := fs.ReadDir(layerFs, ".")
@@ -54,23 +75,35 @@ func TestLayerReadDir(t *testing.T) {
 	// for _, e := range entries {
 	// 	fmt.Printf("entry: %#v\n", e.Name())
 	// }
+
+	// test proper error is returned when no layers succeed
+	_, err = fs.ReadDir(layerFs, "dir4")
+	assert.Equal("layerFilesystem: could not ReadDir: dir4", err.Error())
 }
 
-func TestStat(t *testing.T) {
+func TestLayerFsStat(t *testing.T) {
 	assert := assert.New(t)
 	layerFs := setupTestFs(assert)
-	foo, _ := layerFs.Stat(".")
+	info, _ := layerFs.Stat(".")
 
-	assert.IsType(fileInfo{}, foo)
+	assert.IsType(fileInfo{}, info)
+
+	// test errors in upper layers are skipped
+	info, err := layerFs.Stat("f3.txt")
+	assert.Nil(err)
+
+	// test proper error is returned when no layers succeed
+	_, err = layerFs.Stat("f4.txt")
+	assert.Equal("layerFilesystem: could not Stat: f4.txt", err.Error())
 }
 
-func TestWalkDir(t *testing.T) {
+func TestLayerFsWalkDir(t *testing.T) {
 	assert := assert.New(t)
 	layerFs := setupTestFs(assert)
 	assert.Nil(fs.WalkDir(layerFs, ".", func(path string, d fs.DirEntry, err error) error {
 		assert.Nil(err)
 
-		sourceFs, err := GetFsForDirEntry(d)
+		sourceFs, err := GetLayerForDirEntry(d)
 		assert.Nil(err)
 		if d.IsDir() {
 			return nil
@@ -83,7 +116,7 @@ func TestWalkDir(t *testing.T) {
 	}))
 }
 
-func TestReadDirFile(t *testing.T) {
+func TestLayerFsReadDirFile(t *testing.T) {
 	assert := assert.New(t)
 	layerFs := setupTestFs(assert)
 
