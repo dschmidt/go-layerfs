@@ -62,9 +62,9 @@ func TestDirFileReadDir(t *testing.T) {
 		name: "foo.txt",
 	}
 
-	// test ReadDir does not accept 0 as argument
-	_, err := dirFile.ReadDir(0)
-	assert.Equal(err.Error(), "go-layerfs: could not ReadDir because n >= 0 is not supported: foo.txt")
+	// test ReadDir does not strictly positive numbers as argument
+	_, err := dirFile.ReadDir(1)
+	assert.Equal(err.Error(), "go-layerfs: could not ReadDir because n > 0 is not supported: foo.txt")
 
 	// test ReadDir propagates Stat errors
 	_, err = dirFile.ReadDir(-1)
