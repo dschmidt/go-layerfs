@@ -22,8 +22,8 @@ func (f *DirFile) GetFs() fs.FS {
 
 // ReadDir reads entries from the layerfs.
 func (f *DirFile) ReadDir(n int) ([]fs.DirEntry, error) {
-	if n >= 0 {
-		return nil, newError("could not ReadDir because n >= 0 is not supported", f.name)
+	if n > 0 {
+		return nil, newError("could not ReadDir because n > 0 is not supported", f.name)
 	}
 
 	info, err := f.Stat()
