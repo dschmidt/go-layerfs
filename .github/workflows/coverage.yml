@@ -24,5 +24,4 @@ jobs:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           go test -race -covermode atomic -coverprofile=profile.cov ./...
-          go install github.com/mattn/goveralls@latest
-          $(go env GOPATH)/bin/goveralls -coverprofile=profile.cov -service=github
+          go run github.com/mattn/goveralls -coverprofile=profile.cov -service=github
