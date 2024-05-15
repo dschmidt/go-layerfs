@@ -3,6 +3,8 @@ package layerfs
 import (
 	"io/fs"
 	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/psanford/memfs"
@@ -89,7 +91,7 @@ func TestLayerFsStat(t *testing.T) {
 	assert.IsType(FileInfo{}, info)
 
 	// test errors in upper layers are skipped
-	info, err := layerFs.Stat("f3.txt")
+	_, err := layerFs.Stat("f3.txt")
 	assert.Nil(err)
 
 	// test proper error is returned when no layers succeed
@@ -130,4 +132,25 @@ func TestLayerFsReadDirFile(t *testing.T) {
 	// for _, e := range entries {
 	// 	// fmt.Printf("entry: %#v\n", e)
 	// }
+}
+
+func TestHTTP(t *testing.T) {
+	assert := assert.New(t)
+	layerFs := setupTestFs(assert)
+
+	handler := http.NewServeMux()
+	handler.Handle("/", http.FileServer(http.FS(layerFs)))
+
+	svr := httptest.NewServer(handler)
+	defer svr.Close()
+
+	resp, err := http.DefaultClient.Get(svr.URL + "/f1.txt")
+	assert.NoError(err)
+	resp.Body.Close()
+	assert.Equal(http.StatusOK, resp.StatusCode)
+
+	resp, err = http.DefaultClient.Get(svr.URL + "/does_not_exist")
+	assert.NoError(err)
+	resp.Body.Close()
+	assert.Equal(http.StatusNotFound, resp.StatusCode)
 }
