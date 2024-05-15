@@ -1,8 +1,6 @@
 package layerfs
 
-import (
-	"io/fs"
-)
+import "io/fs"
 
 // New creates a new LayerFs instance based on 0-n fs.FS layers.
 func New(layers ...fs.FS) *LayerFs {
@@ -21,8 +19,10 @@ type LayerFs struct {
 
 // Open opens the named file (implements fs.FS).
 func (fsys *LayerFs) Open(name string) (fs.File, error) {
+	var err error
 	for _, layer := range fsys.layers {
-		f, err := layer.Open(name)
+		var f fs.File
+		f, err = layer.Open(name)
 		if err != nil {
 			continue
 		}
@@ -35,7 +35,7 @@ func (fsys *LayerFs) Open(name string) (fs.File, error) {
 		}, nil
 	}
 
-	return nil, newError("could not Open", name)
+	return nil, wrapError(err, "could not Open", name)
 }
 
 // ReadFile reads the named file and returns its contents (implements fs.ReadFileFS).
